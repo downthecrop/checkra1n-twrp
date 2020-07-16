@@ -4,7 +4,7 @@
 
 > Automate TWRP commands to launch checkra1n on arm64 Android
 
-copies an OpenRecoveryScript (checkra1n.zip) file to `/data/checkra1n` and a recovery command to `/cache/recovery/command` to execute checkra1n for the next launch of TWRP
+Copies an OpenRecoveryScript (checkra1n.zip) file to `/data/checkra1n` and a recovery command to `/cache/recovery/command` to execute checkra1n for the next launch of TWRP
 
 tl;dr one tap checkra1n execution for Android.
 
@@ -15,15 +15,6 @@ tl;dr one tap checkra1n execution for Android.
 - USB-C to USB-A Adapter
 - TWRP Custom Recovery
 - Supported iOS/tvOS device
-
-## Installation
-
-Just download from the Play Store. These are alternatives for FOSS heads.
-
-- APK Installer Release: <a href="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/release/app-release.apk">app-release.apk</a>
-- TWRP Script Release: <a href="https://github.com/downthecrop/checkra1n-twrp/releases/latest">checkra1n-twrp-flashable.zip</a>
-
----
 
 ## Features
 
@@ -46,6 +37,15 @@ Just download from the Play Store. These are alternatives for FOSS heads.
 	- No. If you could already do this manually in TWRP, yes definitely. My Nexus 5X (2015) and Mi Mix 3 (2018) both work.
 - <a href="https://help.ifixit.com/article/108-dfu-restore" target="_blank">`DFU Instructions`</a>
 
+
+---
+
+## Installation
+
+Just download from the Play Store. These are alternatives for FOSS heads.
+
+- APK Installer Release: <a href="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/release/app-release.apk">app-release.apk</a>
+- TWRP Script Release: <a href="https://github.com/downthecrop/checkra1n-twrp/releases/latest">checkra1n-twrp-flashable.zip</a>
 
 ---
 
