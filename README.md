@@ -14,34 +14,34 @@
 
 ## Installation
 
-- All the `code` required to get started
-- Images of what it should look like
+Just download from the Play Store. These are alternatives for FOSS heads.
+
+- APK Installer Release: <a href="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/release/app-release.apk">app-release.apk</a>
+- TWRP Script Release: <a href="https://github.com/downthecrop/checkra1n-twrp/releases/latest">checkra1n-twrp-flashable.zip</a>
 
 ---
 
 ## Features
-## Usage (Optional)
 
-### Step 1
+- Boots to TWRP and executes checkra1n with one button
+- Provides DFU Instructions in App
+- Automaically reboots to Android once it detects checkra1n is complete 
 
-- **Option 1**
-    - 🍴 Fork this repo!
+### Instructions
 
-- **Option 2**
-    - 👯 Clone this repo to your local machine using `https://github.com/joanaz/HireDot2.git`
-
-### Step 2
-
-- **HACK AWAY!** 🔨🔨🔨
-
-### Step 3
-
-- 🔃 Create a new pull request using <a href="https://github.com/joanaz/HireDot2/compare/" target="_blank">`https://github.com/joanaz/HireDot2/compare/`</a>.
+- **Root Required**
+	- Open the App
+	- Allow root/su permissions
+	- Tap the reboot button
 
 ## FAQ
 
-- **How do I do *specifically* so and so?**
-    - No problem! Just do this.
+- **Why run in recovery?**
+    - TWRP provides an environment with fewer services fighting over the USB controller. checkra1n relies on a highly controlled data flow over USB.
+- ** Will this work with all Android phones?**
+	- No. If you could already do this manually in TWRP, yes definitely. My Nexus 5X (2015) and Mi Mix 3 (2018) both work.
+- <a href="https://help.ifixit.com/article/108-dfu-restore" target="_blank">`DFU Instructions`</a>
+
 
 ---
 
