@@ -4,6 +4,12 @@
 
 > Automate TWRP commands to launch checkra1n on arm64 Android
 
+copies an OpenRecoveryScript (checkra1n.zip) file to /data/checkra1n and a recovery command to specify this as an automatic target for the next launch of TWRP /cache/recovery/command
+
+tl;dr one tap checkra1n execution for Android.
+
+![Screen Shot](https://i.imgur.com/QyS2uyF.png)
+
 
 **Requirements**
 
@@ -38,7 +44,7 @@ Just download from the Play Store. These are alternatives for FOSS heads.
 
 - **Why run in recovery?**
     - TWRP provides an environment with fewer services fighting over the USB controller. checkra1n relies on a highly controlled data flow over USB.
-- ** Will this work with all Android phones?**
+- **Will this work with all Android phones?**
 	- No. If you could already do this manually in TWRP, yes definitely. My Nexus 5X (2015) and Mi Mix 3 (2018) both work.
 - <a href="https://help.ifixit.com/article/108-dfu-restore" target="_blank">`DFU Instructions`</a>
 
@@ -47,7 +53,7 @@ Just download from the Play Store. These are alternatives for FOSS heads.
 
 ## Support
 
-I will not respond to errors or problems on Twitter but you should still follow me.
+I will not respond to errors or problems on Twitter but you should still follow me. Report problems here
 
 - Twitter at <a href="http://twitter.com/downthecrop" target="_blank">`@downthecrop`</a>
 - YouTube at <a href="http://youtube.com/downthecrop" target="_blank">`@downthecrop`</a>
