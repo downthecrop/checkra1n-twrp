@@ -60,5 +60,5 @@ I will not respond to errors or problems on Twitter but you should still follow 
 
 ## License
 
-- BSD Zero Clause <a herf="https://github.com/downthecrop/checkra1n-twrp/blob/master/LICENSE">LICENSE</a>
+- BSD Zero Clause <a href="https://github.com/downthecrop/checkra1n-twrp/blob/master/LICENSE">LICENSE</a>
 - Copyright 2020 © <a href="https://downthecrop.xyz/" target="_blank">downthecrop</a>.
