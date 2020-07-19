@@ -9,7 +9,7 @@ Copies an OpenRecoveryScript (checkra1n.zip) file to `/data/checkra1n` and a rec
 tl;dr one tap checkra1n execution for Android.
 
 
-<a href="https://play.google.com/store/apps/details?id=com.downthecrop.checkra1n_kotlin"><img width= src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">Google Play</a>
+<a href="https://play.google.com/store/apps/details?id=com.downthecrop.checkra1n_kotlin"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">Google Play</a>
 
 **Requirements**
 
