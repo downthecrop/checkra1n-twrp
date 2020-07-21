@@ -31,7 +31,7 @@ tl;dr one tap checkra1n execution for Android.
 	- Allow root/su permissions
 	- Tap the reboot button
 
-## FAQ
+## FAQ/Info
 
 - **Why run in recovery?**
     - TWRP provides an environment with fewer services fighting over the USB controller. checkra1n relies on a highly controlled data flow over USB.
@@ -39,8 +39,10 @@ tl;dr one tap checkra1n execution for Android.
 	- No. If you could already do this manually in TWRP, yes definitely. My Nexus 5X (2015) and Mi Mix 3 (2018) both work.
 - <a href="https://help.ifixit.com/article/108-dfu-restore" target="_blank">`DFU Instructions`</a>
 
-
----
+- **Blog Post**
+	- <a href="https://downthecrop.xyz/blog/jailbreak-ios-device-with-android-phone-checkra1n-twrp-app/">https://downthecrop.xyz/blog/jailbreak-ios-device-with-android-phone-checkra1n-twrp-app/</a>
+- **Demo/Tutorial Video**
+	- <a href="https://www.youtube.com/watch?v=eIRkph1XfM0">https://www.youtube.com/watch?v=eIRkph1XfM0</a>
 
 ## Installation
 
