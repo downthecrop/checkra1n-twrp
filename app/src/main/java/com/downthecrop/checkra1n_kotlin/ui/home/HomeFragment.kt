@@ -15,125 +15,144 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.downthecrop.checkra1n_kotlin.R
 import java.io.*
+import java.security.MessageDigest
+import kotlin.experimental.and
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        val myButton: Button = root.findViewById(R.id.reboot_button)
+        val messageLog: TextView = root.findViewById(R.id.text_home)
+        val startButton: Button = root.findViewById(R.id.reboot_button)
         val cacheDir = requireContext().cacheDir
+        val bootHash = "3B9CB161FE0C765397FA1E1E809819CE"
+        val zipHash = "21FC5E50F47D9BC9882C5F0386BBD5EC"
         var errorCode = 0
+
+        fun addToLog(message: String){
+            messageLog.append(Html.fromHtml("<em>$message</em><br>"))
+        }
+
+        fun addToLog(message: String, color: Int){
+
+            val colorSuccess = "<font color=#657b83>"
+            val colorErr = "<font color=#b58900>"
+
+            if (color == 0)
+                messageLog.append(Html.fromHtml("<em>$colorErr$message</font></em><br>"))
+            else if (color == 1)
+                messageLog.append(Html.fromHtml("<em>$colorSuccess$message</font></em><br>"))
+        }
+
+        fun setButtonText(message: String) {
+            startButton.text = "$message"
+        }
 
         // build alert dialog
         val dialogBuilder = AlertDialog.Builder(this.context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
 
         // set message of alert dialog
         dialogBuilder.setMessage("Do you want to reboot into TWRP to run checkra1n?")
-            // if the dialog is cancelable
             .setCancelable(false)
-            // positive button text and action
             .setPositiveButton("Proceed", DialogInterface.OnClickListener {
-                    dialog, id -> Runtime.getRuntime().exec("su -c reboot recovery")
+                    dialog, id -> shellExec("su -c reboot recovery")
             })
-            // negative button text and action
             .setNegativeButton("Cancel", DialogInterface.OnClickListener {
-                    dialog, id -> textView.append(Html.fromHtml("<em><font color=#b58900>ERR: Declined Reboot</font><br>"))
-
+                    dialog, id -> addToLog("ERR: Declined Reboot",0)
             })
 
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.setMovementMethod(ScrollingMovementMethod())
-            textView.text = (Html.fromHtml(""+
-                    "<em>Info: checkra1n Android<br>" +
-                    "<em>Bundled binary version: 0.10.2 arm64 Linux<br>"))
+            messageLog.setMovementMethod(ScrollingMovementMethod())
+            addToLog(""+
+                    "Info: checkra1n Android<br>" +
+                    "Bundled binary version: 0.10.2 arm64 Linux")
         })
-        homeViewModel.button.observe(viewLifecycleOwner, Observer {
 
+        homeViewModel.button.observe(viewLifecycleOwner, Observer {
             try{
-                Runtime.getRuntime().exec("su")
-                val checkRoot = shell_exec("su -c echo su")
+
+                val checkRoot = shellExec("su -c echo su")
 
                 if (checkRoot == "su"){
-                    myButton.text = "Run checkra1n (Reboot Recovery)"
-                    textView.append(Html.fromHtml("<em>Log: Root verified<br>"))
-                }
-                else{
-                    myButton.text = "Running in user mode. Enable Root."
+                    setButtonText("Run checkra1n (Reboot Recovery)")
+                    addToLog("Log: Root verified",1)
+                } else{
+                    setButtonText("Running in user mode. Enable Root.")
                 }
             }
             catch (e: IOException) {
-                myButton.text = "Device Not Rooted"
-                textView.append(Html.fromHtml("<em>Log: This Android device isn't rooted. Root is required for operation<br>"))
+                setButtonText("Device Not Rooted")
+                addToLog("Log: This Android device isn't rooted. Root is required for operation")
                 errorCode = 1
-
             }
 
-            myButton.setOnClickListener(){
+            startButton.setOnClickListener(){
                 try {
 
-                    val checkRoot = shell_exec("su -c echo su")
+                    val checkRoot = shellExec("su -c echo su")
 
                     if (checkRoot == "su"){
 
-                        myButton.text = "Run checkra1n (Reboot Recovery)"
+                        setButtonText("Run checkra1n (Reboot Recovery)")
 
                         copyToCache(R.raw.checkra1n, "checkra1n.zip");
                         copyToCache(R.raw.bootcommand, "command");
 
-                        textView.append(Html.fromHtml("<em>Log: Copied checkra1n.zip to $cacheDir<br>"))
-                        textView.append(Html.fromHtml("<em>Log: Copied bootcommand to $cacheDir<br>"))
+                        val cacheZIP = File("$cacheDir/checkra1n.zip")
+                        val cacheBoot = File("$cacheDir/command")
 
-                        Runtime.getRuntime().exec("su -c mkdir /data/checkra1n")
-                        Runtime.getRuntime().exec("su -c cp $cacheDir/checkra1n.zip /data/checkra1n/")
-                        Runtime.getRuntime().exec("su -c cp $cacheDir/command /cache/recovery/command")
+                        val cacheZipHash = cacheZIP.calcHash().toHexString().toUpperCase()
+                        val cacheBootHash = cacheBoot.calcHash().toHexString().toUpperCase()
+
+                        if (cacheZipHash == zipHash)
+                            addToLog("Log: Copied checkra1n.zip to $cacheDir")
+                        if (cacheBootHash == bootHash)
+                            addToLog("Log: Copied bootcommand to $cacheDir")
+
+
+                        shellExec("su -c mkdir /data/checkra1n")
+                        shellExec("su -c cp $cacheDir/checkra1n.zip /data/checkra1n/")
+                        shellExec("su -c cp $cacheDir/command /cache/recovery/command")
 
                         //Verify that the copied files from the app cache are in their intended places
-                        var verifyCheckra1nZIP = shell_exec("su -c [ -f '/data/checkra1n/checkra1n.zip' ] && echo true || echo false")
-                        var verifyBootCommand = shell_exec("su -c [ -f '/cache/recovery/command' ] && echo true || echo false")
+                        var verifyCheckra1nZIP = shellExec("su -c [ -f '/data/checkra1n/checkra1n.zip' ] && echo true || echo false")
+                        var verifyBootCommand = shellExec("su -c [ -f '/cache/recovery/command' ] && echo true || echo false")
 
                         if (verifyCheckra1nZIP == "true"){
-                            textView.append(Html.fromHtml("<em>Log: checkra1n.zip located at /data/checkra1n/<br>"))
+                            addToLog("Log: checkra1n.zip located at /data/checkra1n/")
                         } else{
-                            textView.append(Html.fromHtml("<em><font color=#b58900>Error: checkra1n.zip NOT FOUND /data/checkra1n/</font><br>"))
+                            addToLog("ERR: checkra1n.zip NOT FOUND /data/checkra1n/",0)
                         }
                         if (verifyBootCommand == "true"){
-                            textView.append(Html.fromHtml("<em>Log: boot command located at /cache/recovery/command<br>"))
+                            addToLog("Log: boot command located at /cache/recovery/command")
                         } else{
-                            textView.append(Html.fromHtml("<em><font color=#b58900>ERR: boot command NOT FOUND /cache/recovery/command</font><br>"))
+                            addToLog("ERR: boot command NOT FOUND /cache/recovery/command",0)
                         }
 
 
                         if(verifyBootCommand == "true" && verifyCheckra1nZIP == "true"){
-                            textView.append(Html.fromHtml("<em><font color=#657b83>SUCCESS: Ready to boot recovery.</font><br>"))
+                            addToLog("SUCCESS: Ready to boot recovery.",1)
                             val alert = dialogBuilder.create()
                             alert.setTitle("You are about to reboot")
                             alert.show()
                         }
+                    } else if(errorCode < 1){
+                        setButtonText("Running in user mode. Enable Root.")
                     }
-                    else if(errorCode < 1){
-                        myButton.text = "Running in user mode. Enable Root."
-                    }
-
                 } catch (e: IOException) {
                 }
             }
         })
-
-
         return root
     }
 
-    fun shell_exec(cmd: String?): String? {
+    private fun shellExec(cmd: String?): String? {
         var o: String? = ""
         try {
             val p = Runtime.getRuntime().exec(cmd)
@@ -146,11 +165,10 @@ class HomeFragment : Fragment() {
         return o
     }
 
-    private fun copyToCache(
-        resourceId: Int,
-        resourceName: String
-    ) {
+    private fun copyToCache(resourceId: Int, resourceName: String) {
+
         val cacheFileURI: String = requireContext().cacheDir.toString() +"/"+ resourceName
+
         try {
             val `in` = resources.openRawResource(resourceId)
             var out: FileOutputStream? = null
@@ -170,6 +188,25 @@ class HomeFragment : Fragment() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
+
+    fun File.calcHash(algorithm: String = "MD5", bufferSize: Int = 1024): ByteArray {
+        this.inputStream().use { input ->
+            val buffer = ByteArray(bufferSize)
+            val digest = MessageDigest.getInstance(algorithm)
+
+            read@ while (true) {
+                when (val bytesRead = input.read(buffer)) {
+                    -1 -> break@read
+                    else -> digest.update(buffer, 0, bytesRead)
+                }
+            }
+            return digest.digest()
+        }
+    }
+
+    fun ByteArray.toHexString(): String {
+        return this.fold(StringBuilder()) { result, b -> result.append(String.format("%02X", b)) }.toString()
     }
 
 }
