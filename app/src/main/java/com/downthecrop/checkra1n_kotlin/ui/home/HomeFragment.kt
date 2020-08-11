@@ -15,8 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.downthecrop.checkra1n_kotlin.R
 import java.io.*
-import java.security.MessageDigest
-import kotlin.experimental.and
 
 
 class HomeFragment : Fragment() {
@@ -31,9 +29,8 @@ class HomeFragment : Fragment() {
         val messageLog: TextView = root.findViewById(R.id.text_home)
         val startButton: Button = root.findViewById(R.id.reboot_button)
         val cacheDir = requireContext().cacheDir
-        val bootHash = "3B9CB161FE0C765397FA1E1E809819CE"
-        val zipHash = "21FC5E50F47D9BC9882C5F0386BBD5EC"
-        var errorCode = 0
+        val localZipDir = "/data/checkra1n"
+        val localRecoveryDir = "/cache/recovery"
 
         fun addToLog(message: String){
             messageLog.append(Html.fromHtml("<em>$message</em><br>"))
@@ -75,21 +72,15 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.button.observe(viewLifecycleOwner, Observer {
-            try{
 
-                val checkRoot = shellExec("su -c echo su")
+            val checkRoot = shellExec("su -c echo su")
 
-                if (checkRoot == "su"){
-                    setButtonText("Run checkra1n (Reboot Recovery)")
-                    addToLog("Log: Root verified",1)
-                } else{
-                    setButtonText("Running in user mode. Enable Root.")
-                }
-            }
-            catch (e: IOException) {
-                setButtonText("Device Not Rooted")
-                addToLog("Log: This Android device isn't rooted. Root is required for operation")
-                errorCode = 1
+            if (checkRoot == "su"){
+                setButtonText("Run checkra1n (Reboot Recovery)")
+                addToLog("Log: Root verified",1)
+            } else{
+                setButtonText("Running in user mode. Enable Root.")
+                addToLog("ERR: Root is required for operation",0)
             }
 
             startButton.setOnClickListener(){
@@ -104,48 +95,49 @@ class HomeFragment : Fragment() {
                         copyToCache(R.raw.checkra1n, "checkra1n.zip");
                         copyToCache(R.raw.bootcommand, "command");
 
-                        val cacheZIP = File("$cacheDir/checkra1n.zip")
-                        val cacheBoot = File("$cacheDir/command")
+                        val cacheZip = File("$cacheDir/checkra1n.zip")
+                        val cacheRecovery = File("$cacheDir/command")
 
-                        val cacheZipHash = cacheZIP.calcHash().toHexString().toUpperCase()
-                        val cacheBootHash = cacheBoot.calcHash().toHexString().toUpperCase()
-
-                        if (cacheZipHash == zipHash)
+                        if (cacheZip.exists())
                             addToLog("Log: Copied checkra1n.zip to $cacheDir")
-                        if (cacheBootHash == bootHash)
+                        else
+                            addToLog("ERR: Failed to copy checkra1n.zip to $cacheDir",0)
+                        if (cacheRecovery.exists())
                             addToLog("Log: Copied bootcommand to $cacheDir")
+                        else
+                            addToLog("ERR: Failed to copy bootcommand to $cacheDir",0)
 
-
-                        shellExec("su -c mkdir /data/checkra1n")
-                        shellExec("su -c cp $cacheDir/checkra1n.zip /data/checkra1n/")
-                        shellExec("su -c cp $cacheDir/command /cache/recovery/command")
+                        shellExec("su -c mkdir $localZipDir")
+                        shellExec("su -c cp $cacheDir/checkra1n.zip $localZipDir")
+                        shellExec("su -c cp $cacheDir/command $localRecoveryDir/command")
 
                         //Verify that the copied files from the app cache are in their intended places
-                        var verifyCheckra1nZIP = shellExec("su -c [ -f '/data/checkra1n/checkra1n.zip' ] && echo true || echo false")
-                        var verifyBootCommand = shellExec("su -c [ -f '/cache/recovery/command' ] && echo true || echo false")
+                        val localZip = shellExec("su -c [ -f '/data/checkra1n/checkra1n.zip' ] && echo True || echo False")?.toBoolean()
+                        val localRecovery = shellExec("su -c [ -f '/cache/recovery/command' ] && echo True || echo False")?.toBoolean()
 
-                        if (verifyCheckra1nZIP == "true"){
-                            addToLog("Log: checkra1n.zip located at /data/checkra1n/")
-                        } else{
-                            addToLog("ERR: checkra1n.zip NOT FOUND /data/checkra1n/",0)
-                        }
-                        if (verifyBootCommand == "true"){
-                            addToLog("Log: boot command located at /cache/recovery/command")
-                        } else{
-                            addToLog("ERR: boot command NOT FOUND /cache/recovery/command",0)
-                        }
+                        if (localZip!!)
+                            addToLog("Log: checkra1n.zip located at $localZipDir")
+                        else
+                            addToLog("ERR: checkra1n.zip NOT FOUND $localZipDir",0)
+                        if (localRecovery!!)
+                            addToLog("Log: boot command located at $localRecoveryDir")
+                        else
+                            addToLog("ERR: boot command NOT FOUND $localRecoveryDir",0)
 
-
-                        if(verifyBootCommand == "true" && verifyCheckra1nZIP == "true"){
+                        if(localZip!! && localRecovery!!){
                             addToLog("SUCCESS: Ready to boot recovery.",1)
                             val alert = dialogBuilder.create()
                             alert.setTitle("You are about to reboot")
                             alert.show()
+                        } else{
+                            addToLog("ERR: Failed at final step. Please try again.",0)
                         }
-                    } else if(errorCode < 1){
+                    } else{
                         setButtonText("Running in user mode. Enable Root.")
+                        addToLog("ERR: Unable to execute",0)
                     }
                 } catch (e: IOException) {
+                    addToLog("ERR: IOException in main task. Unable to execute",0)
                 }
             }
         })
@@ -189,24 +181,4 @@ class HomeFragment : Fragment() {
             e.printStackTrace()
         }
     }
-
-    fun File.calcHash(algorithm: String = "MD5", bufferSize: Int = 1024): ByteArray {
-        this.inputStream().use { input ->
-            val buffer = ByteArray(bufferSize)
-            val digest = MessageDigest.getInstance(algorithm)
-
-            read@ while (true) {
-                when (val bytesRead = input.read(buffer)) {
-                    -1 -> break@read
-                    else -> digest.update(buffer, 0, bytesRead)
-                }
-            }
-            return digest.digest()
-        }
-    }
-
-    fun ByteArray.toHexString(): String {
-        return this.fold(StringBuilder()) { result, b -> result.append(String.format("%02X", b)) }.toString()
-    }
-
 }
