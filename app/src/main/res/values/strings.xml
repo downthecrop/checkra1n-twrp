@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">checkra1n-twrp</string>
     <string name="title_home">checkra1n</string>
-    <string name="title_dashboard">FAQ and DFU</string>
+    <string name="title_faq">FAQ and DFU</string>
 </resources>

@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.downthecrop.checkra1n_kotlin.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_faq"
+        android:name="com.downthecrop.checkra1n_kotlin.ui.faq.FAQFragment"
+        android:label="@string/title_faq"
+        tools:layout="@layout/fragment_faq" />
 
 </navigation>

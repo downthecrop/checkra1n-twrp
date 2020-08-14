@@ -1,32 +1,29 @@
-package com.downthecrop.checkra1n_kotlin.ui.dashboard
+package com.downthecrop.checkra1n_kotlin.ui.faq
 
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.downthecrop.checkra1n_kotlin.R
-import org.w3c.dom.Text
 
-class DashboardFragment : Fragment() {
+class FAQFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var faqViewModel: FAQViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
+        faqViewModel = ViewModelProviders.of(this).get(FAQViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_faq, container, false)
+        val textView: TextView = root.findViewById(R.id.text_faq)
+        faqViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = (Html.fromHtml("" +
                     "<br><h1>FAQ</h1>" +
                     "<li> This application allows for automated startup of a bundled .zip to execute checkra1n in TWRP to jailbreak supported iOS devices. More info and source code available here: <a href='https://github.com/downthecrop/checkra1n-twrp'>https://github.com/downthecrop/checkra1n-twrp</a></li>\n" +

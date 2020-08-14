@@ -27,10 +27,12 @@ class HomeFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val messageLog: TextView = root.findViewById(R.id.text_home)
+        messageLog.movementMethod = ScrollingMovementMethod()
         val startButton: Button = root.findViewById(R.id.reboot_button)
         val cacheDir = requireContext().cacheDir
         val localZipDir = "/data/checkra1n"
         val localRecoveryDir = "/cache/recovery"
+
 
         fun addToLog(message: String){
             messageLog.append(Html.fromHtml("<em>$message</em><br>"))
@@ -45,6 +47,16 @@ class HomeFragment : Fragment() {
                 messageLog.append(Html.fromHtml("<em>$colorErr$message</font></em><br>"))
             else if (color == 1)
                 messageLog.append(Html.fromHtml("<em>$colorSuccess$message</font></em><br>"))
+        }
+
+        fun arch(): Boolean {
+            if (System.getProperty("os.arch") == "aarch64")
+                return true
+            return false
+        }
+
+        fun archName(): String {
+            return System.getProperty("os.arch");
         }
 
         fun setButtonText(message: String) {
@@ -64,18 +76,18 @@ class HomeFragment : Fragment() {
                     dialog, id -> addToLog("ERR: Declined Reboot",0)
             })
 
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            messageLog.setMovementMethod(ScrollingMovementMethod())
-            addToLog(""+
-                    "Info: checkra1n Android<br>" +
-                    "Bundled binary version: 0.10.2 arm64 Linux")
-        })
-
         homeViewModel.button.observe(viewLifecycleOwner, Observer {
+
+            addToLog("Info: checkra1n Android<br>" +
+                    "Bundled binary version: 0.10.2 arm64 Linux <br>"+
+                    "os.arch: "+archName())
+            if (!arch()){
+                addToLog("Only ARM64 Devices are supported at this time.",0)
+            }
 
             val checkRoot = shellExec("su -c echo su")
 
-            if (checkRoot == "su"){
+            if (checkRoot == "su" && arch()){
                 setButtonText("Run checkra1n (Reboot Recovery)")
                 addToLog("Log: Root verified",1)
             } else{
@@ -88,7 +100,7 @@ class HomeFragment : Fragment() {
 
                     val checkRoot = shellExec("su -c echo su")
 
-                    if (checkRoot == "su"){
+                    if (checkRoot == "su" && arch()){
 
                         setButtonText("Run checkra1n (Reboot Recovery)")
 
