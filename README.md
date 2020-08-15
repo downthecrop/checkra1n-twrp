@@ -14,6 +14,7 @@ tl;dr one tap checkra1n execution for Android.
 **Requirements**
 
 - Rooted Android device
+- ARM64 CPU
 - USB-C to USB-A Adapter
 - TWRP Custom Recovery
 - Supported iOS/tvOS device
