@@ -1,4 +1,4 @@
-<a href="https://downthecrop.xyz/"><img src="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_cr.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
+<a href="https://play.google.com/store/apps/details?id=com.downthecrop.checkra1n_kotlin"><img src="https://i.imgur.com/xwx28Jl.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
 
 # checkra1n TWRP
 
