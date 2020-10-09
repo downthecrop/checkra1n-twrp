@@ -1,0 +1,50 @@
+#!/sbin/sh
+#
+# Script created by @downthecrop
+#
+# checkra1n credits
+#
+# argp axi0mX Dany Lisiansky Jaywalker Adam Demasi h0m3us3r littlelailo
+# Longhorn nitoTV Jamie Bishop pimskeks qwertyoruiopz Sam Bingner Rick Mark
+# s1guza Dylan Laws jndok Jonathan Seals xerub Steve PsychoTea Simone Ferrini
+# ihackbanme iH8sn0w Ori Kadosh Rony Kelner Ayden Panhuyzen
+#
+# checkra1n version 0.11.0 beta arm64 & arm32
+# SHA256 ARM64: b48774e5d240ce192016a3fa97df7ef855220576f0704c83ed627d092cb2e224
+# SHA256 ARM32: d751f4b245bd4071c571654607ca4058e9e7dc4a5fa30639024b6067eebf5c3b
+
+export RA1NZIP="$3"
+export OUTFD="/proc/self/fd/$2"
+export TMP="/tmp"
+
+ui_print() {
+  echo "ui_print $1
+    ui_print" >> $OUTFD
+}
+
+LogMsg() {
+
+ENDTEXT="[*]: All Done"
+while read text; 
+do 
+	ui_print "$text";
+	if [[ "$text" == *"$ENDTEXT"* ]]; then
+	  reboot system
+	fi
+done
+}
+
+setenforce 0
+
+for f in checkra1n; do
+  unzip -o "$RA1NZIP" "$f" -d "$TMP"
+done
+
+for f in  checkra1n; do
+  chmod +x "$TMP/$f"
+done
+
+./tmp/checkra1n -c 2>&1 | LogMsg
+
+ui_print "Checkra1n - Done"
+exit 0

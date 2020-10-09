@@ -32,6 +32,8 @@ class HomeFragment : Fragment() {
         val cacheDir = requireContext().cacheDir
         val localZipDir = "/data/checkra1n"
         val localRecoveryDir = "/cache/recovery"
+        val archArray = arrayOf("aarch64","armv4","armv4t","armv5t","armv5te","armv5tej","armv6","armv7")
+        var archIndex = -1;
 
 
         fun addToLog(message: String){
@@ -50,14 +52,21 @@ class HomeFragment : Fragment() {
         }
 
         fun arch(): Boolean {
-            if (System.getProperty("os.arch") == "aarch64")
-                return true
-            return false
+            archIndex = archArray.indexOf(System.getProperty("os.arch")); //Set index for printing
+            return archArray.contains(System.getProperty("os.arch")) //True or false return for support arch
         }
 
         fun archName(): String {
             return System.getProperty("os.arch");
         }
+
+        fun binaryPlatform(): String {
+            if (archIndex > 0)
+                return "Using checkra1n-arm (32bit)"
+            else
+                return "Using checkra1n-arm64 (64bit)"
+        }
+
 
         fun setButtonText(message: String) {
             startButton.text = "$message"
@@ -79,12 +88,12 @@ class HomeFragment : Fragment() {
         homeViewModel.button.observe(viewLifecycleOwner, Observer {
 
             addToLog("Info: checkra1n Android<br>" +
-                    "Bundled binary version: 0.10.2 arm64 Linux <br>"+
-                    "os.arch: "+archName())
+                    "binary version: 0.11.0 arm64 & arm32<br>"+
+                    "os.arch: "+archName()+"<br>"+
+                    "binary: "+binaryPlatform())
             if (!arch()){
-                addToLog("Only ARM64 Devices are supported at this time.",0)
+                addToLog("Unsupported architecture. Only ARM and ARM64 CPU's supported",0)
             }
-
             val checkRoot = shellExec("su -c echo su")
 
             if (checkRoot == "su" && arch()){
@@ -104,7 +113,13 @@ class HomeFragment : Fragment() {
 
                         setButtonText("Run checkra1n (Reboot Recovery)")
 
-                        copyToCache(R.raw.checkra1n, "checkra1n.zip");
+                        var rawZipFile = R.raw.checkra1n_arm64
+
+                        if (archIndex > 0){
+                            var rawZipFile = R.raw.checkra1n_arm
+                        }
+
+                        copyToCache(rawZipFile, "checkra1n.zip");
                         copyToCache(R.raw.bootcommand, "command");
 
                         val cacheZip = File("$cacheDir/checkra1n.zip")
