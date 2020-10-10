@@ -1,4 +1,4 @@
-<a href="https://play.google.com/store/apps/details?id=com.downthecrop.checkra1n_kotlin"><img src="https://i.imgur.com/xwx28Jl.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
+<a href="https://github.com/downthecrop/checkra1n-twrp/blob/master/app/release/app-release.apk"><img src="https://i.imgur.com/xwx28Jl.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
 
 # checkra1n TWRP
 
@@ -7,9 +7,6 @@
 Copies an OpenRecoveryScript (checkra1n.zip) file to `/data/checkra1n` and a recovery command to `/cache/recovery/command` to execute checkra1n for the next launch of TWRP
 
 tl;dr one tap checkra1n execution for Android.
-
-
-<a href="https://play.google.com/store/apps/details?id=com.downthecrop.checkra1n_kotlin"><img width="192px" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"><br>Google Play</a>
 
 **Requirements**
 
