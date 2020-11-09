@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.downthecrop.checkra1n_kotlin.BuildConfig
 import com.downthecrop.checkra1n_kotlin.R
 import java.io.*
 
@@ -32,9 +33,8 @@ class HomeFragment : Fragment() {
         val cacheDir = requireContext().cacheDir
         val localZipDir = "/data/checkra1n"
         val localRecoveryDir = "/cache/recovery"
-        val archArray = arrayOf("aarch64","armv4","armv4t","armv5t","armv5te","armv5tej","armv6","armv7")
+        val archArray = arrayOf("aarch64","armv4","armv4t","armv5t","armv5te","armv5tej","armv6","armv7","armv7l")
         var archIndex = -1;
-
 
         fun addToLog(message: String){
             messageLog.append(Html.fromHtml("<em>$message</em><br>"))
@@ -57,6 +57,7 @@ class HomeFragment : Fragment() {
         }
 
         fun archName(): String {
+            arch()
             return System.getProperty("os.arch");
         }
 
@@ -67,15 +68,11 @@ class HomeFragment : Fragment() {
                 return "Using checkra1n-arm64 (64bit)"
         }
 
-
         fun setButtonText(message: String) {
             startButton.text = "$message"
         }
 
-        // build alert dialog
         val dialogBuilder = AlertDialog.Builder(this.context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
-
-        // set message of alert dialog
         dialogBuilder.setMessage("Do you want to reboot into TWRP to run checkra1n?")
             .setCancelable(false)
             .setPositiveButton("Proceed", DialogInterface.OnClickListener {
@@ -86,9 +83,9 @@ class HomeFragment : Fragment() {
             })
 
         homeViewModel.button.observe(viewLifecycleOwner, Observer {
-
+            val versionName = BuildConfig.VERSION_NAME
             addToLog("Info: checkra1n Android<br>" +
-                    "binary version: 0.11.0 arm64 & arm32<br>"+
+                    "binary version: $versionName arm64 & arm32<br>"+
                     "os.arch: "+archName()+"<br>"+
                     "binary: "+binaryPlatform())
             if (!arch()){
@@ -151,7 +148,7 @@ class HomeFragment : Fragment() {
                         else
                             addToLog("ERR: boot command NOT FOUND $localRecoveryDir",0)
 
-                        if(localZip!! && localRecovery!!){
+                        if(localZip && localRecovery){
                             addToLog("SUCCESS: Ready to boot recovery.",1)
                             val alert = dialogBuilder.create()
                             alert.setTitle("You are about to reboot")
@@ -177,7 +174,7 @@ class HomeFragment : Fragment() {
             val p = Runtime.getRuntime().exec(cmd)
             val b = BufferedReader(InputStreamReader(p.inputStream))
             var line: String? = ""
-            while (b.readLine().also({ line = it }) != null) o += line
+            while (b.readLine().also { line = it } != null) o += line
         } catch (e: Exception) {
             o = "error"
         }

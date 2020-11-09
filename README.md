@@ -1,4 +1,4 @@
-<a href="https://github.com/downthecrop/checkra1n-twrp/blob/master/app/release/app-release.apk"><img src="https://i.imgur.com/xwx28Jl.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
+<a href="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/release/app-release.apk"><img src="https://i.imgur.com/xwx28Jl.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
 
 # checkra1n TWRP
 
