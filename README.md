@@ -2,7 +2,7 @@
 
 # checkra1n TWRP
 
-> Automate TWRP commands to launch checkra1n on arm64 Android
+> Automate TWRP commands to launch checkra1n on arm/arm64 Android
 
 Copies an OpenRecoveryScript (checkra1n.zip) file to `/data/checkra1n` and a recovery command to `/cache/recovery/command` to execute checkra1n for the next launch of TWRP
 
@@ -11,7 +11,7 @@ tl;dr one tap checkra1n execution for Android.
 **Requirements**
 
 - Rooted Android device
-- ARM64 CPU
+- ARM/ARM64 CPU
 - USB-C to USB-A Adapter
 - TWRP Custom Recovery
 - Supported iOS/tvOS device
