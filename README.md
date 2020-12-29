@@ -1,4 +1,4 @@
-<a href="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/release/app-release.apk"><img src="https://i.imgur.com/xwx28Jl.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
+<a href="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/release/app-release.apk"><img src="https://i.imgur.com/4IwlTCt.png" title="checkra1n TWRP" alt="checkra1n TWRP"></a>
 
 # checkra1n TWRP
 
@@ -43,8 +43,6 @@ tl;dr one tap checkra1n execution for Android.
 	- <a href="https://www.youtube.com/watch?v=eIRkph1XfM0">https://www.youtube.com/watch?v=eIRkph1XfM0</a>
 
 ## Installation
-
-Just download from the Play Store. These are alternatives for FOSS heads.
 
 - APK Installer Release: <a href="https://github.com/downthecrop/checkra1n-twrp/raw/master/app/release/app-release.apk">app-release.apk</a>
 - TWRP Script Release: <a href="https://github.com/downthecrop/checkra1n-twrp/releases/latest">checkra1n-twrp-flashable.zip</a>
