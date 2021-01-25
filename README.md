@@ -16,6 +16,11 @@ tl;dr one tap checkra1n execution for Android.
 - TWRP Custom Recovery
 - Supported iOS/tvOS device
 
+**Screenshots**
+|![enter image description here](https://i.imgur.com/EwDITop.png)  | ![enter image description here](https://i.imgur.com/wdKDS9x.png) | ![enter image description here](https://i.imgur.com/oULFfI7.png) |
+|--|--|--|
+
+
 ## Features
 
 - Boots to TWRP and executes checkra1n with one button
